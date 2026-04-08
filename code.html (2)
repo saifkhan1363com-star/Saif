@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <title id="pageTitle"></title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Same navbar -->
+    
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="glass p-4 mb-4">
+                    <h1 id="gameName" class="mb-4"></h1>
+                    <div class="row g-4" id="packagesGrid"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div id="checkoutPanel" class="glass p-4 sticky-top" style="top:100px;">
+                    <h5><i class="fas fa-receipt text-success"></i> চেকআউট</h5>
+                    <div class="mb-3">
+                        <input type="text" id="playerId" class="form-control glass" placeholder="প্লেয়ার আইডি">
+                    </div>
+                    <select id="zone" class="form-control glass mb-3">
+                        <option>বাংলাদেশ</option>
+                        <option>ইন্ডিয়া</option>
+                        <option>গ্লোবাল</option>
+                    </select>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" onclick="payBkash()"><i class="fab fa-btc"></i> bKash</button>
+                        <button class="btn btn-warning" onclick="payNagad()"><i class="fas fa-mobile-alt"></i> Nagad</button>
+                    </div>
+                    <div class="mt-3 small text-muted">
+                        <strong>নাম্বার:</strong> 01838613781<br>
+                        <strong>মেমো:</strong> PlayerID_OrderID
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, ref, onValue } from './assets/js/firebase.js';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+        
+        onValue(ref(db, `games/${slug}`), (snapshot) => {
+            const game = snapshot.val();
+            document.getElementById('pageTitle').textContent = game?.name || 'Game';
+            document.getElementById('gameName').textContent = game?.name || 'Loading...';
+            
+            const packages = game?.packages || [];
+            const grid = document.getElementById('packagesGrid');
+            grid.innerHTML = '';
+            
+            packages.forEach(pkg => {
+                grid.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="game-card glass p-4 text-center cursor-pointer" onclick="selectPackage(${pkg.id}, '${pkg.name}', ${pkg.price})">
+                            <div class="price-glow fs-2 mb-2">৳${pkg.price}</div>
+                            <h6>${pkg.name}</h6>
+                            <small>${pkg.diamonds} ডায়মন্ড</small>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        
+        let selectedPackage = {};
+        window.selectPackage = (id, name, price) => {
+            selectedPackage = {id, name, price};
+            document.querySelector('#checkoutPanel h5').innerHTML = `<i class="fas fa-receipt"></i> ${name} - ৳${price}`;
+        };
+        
+        window.payBkash = () => {
+            if(!selectedPackage.id) return alert('প্যাকেজ সিলেক্ট করুন!');
+            const playerId = document.getElementById('playerId').value;
+            if(!playerId) return alert('প্লেয়ার আইডি দিন!');
+            
+            const orderId = Date.now();
+            const memo = `${playerId}_${orderId}`;
+            alert(`bKash/Nagad এ ৳${selectedPackage.price} পাঠান:\n01838613781\nমেমো: ${memo}\n\nপেমেন্টের পর অর্ডার #${orderId} চেক করুন!`);
+            
+            // Save to Firebase
+            // push(ref(db, 'orders'), {playerId, package: selectedPackage, orderId, status: 'pending'});
+        };
+        
+        window.payNagad = payBkash; // Same function
+    </script>
+</body>
+</html>

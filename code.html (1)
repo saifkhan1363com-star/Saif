@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameTopup Pro - ৫০+ গেম টপআপ | ইনস্ট্যান্ট ডেলিভারি</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="#"><i class="fas fa-gamepad text-danger"></i> GameTopup Pro</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#" id="loginBtn"><i class="fas fa-user"></i> লগইন</a>
+                <a class="nav-link" href="admin/"><i class="fas fa-crown"></i> অ্যাডমিন</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="glass p-5 mt-5 pt-5">
+        <div class="container text-center">
+            <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">
+                <span class="price-glow">৫০+</span> গেম টপআপ
+            </h1>
+            <p class="lead mb-5 animate__animated animate__fadeInUp">ইনস্ট্যান্ট ডেলিভারি | bKash/Nagad | ২৪/৭ সাপোর্ট</p>
+            <a href="#games" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">শুরু করুন <i class="fas fa-rocket"></i></a>
+        </div>
+    </section>
+
+    <!-- Games Grid -->
+    <section id="games" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">আমাদের গেমসমূহ</h2>
+            <div class="row g-4" id="gamesGrid">
+                <!-- 50 Games will load here via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp & Nagad Float -->
+    <a href="https://wa.me/8801838613781?text=GameTopup Pro থেকে টপআপ করতে চাই!" class="floating-neon btn btn-success rounded-circle shadow-lg">
+        <i class="fab fa-whatsapp fa-2x"></i>
+    </a>
+    <div class="floating-neon me-5" style="bottom:30px; right:150px;">
+        <div class="text-center p-3 glass rounded-circle" onclick="copyNagad()">
+            <i class="fas fa-mobile-alt fa-2x text-success mb-1"></i>
+            <div class="small">01838613781</div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">লগইন / রেজিস্টার</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="email" id="loginEmail" class="form-control mb-3 glass" placeholder="ইমেইল">
+                    <input type="password" id="loginPass" class="form-control mb-3 glass" placeholder="পাসওয়ার্ড">
+                    <button class="btn btn-primary w-100 mb-2" onclick="loginUser()">লগইন</button>
+                    <button class="btn btn-outline-light w-100" onclick="registerUser()">নতুন অ্যাকাউন্ট</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/firebase.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

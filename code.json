@@ -1,0 +1,19 @@
+{
+  "games": {
+    "free-fire": {
+      "name": "Free Fire",
+      "packages": [
+        {"id":1, "name":"VIP Pack", "diamonds":106, "price":150},
+        {"id":2, "name":"Pro Pack", "diamonds":218, "price":300}
+      ]
+    }
+  },
+  "orders": {
+    "order123": {
+      "playerId": "abc123",
+      "package": {...},
+      "status": "pending",
+      "timestamp": 1234567890
+    }
+  }
+}

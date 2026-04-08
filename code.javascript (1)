@@ -1,0 +1,88 @@
+import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, ref, get, onValue } from './firebase.js';
+
+let user = null;
+
+// 50 Games Data
+const games = [
+    {id:1, name:'Free Fire', slug:'free-fire', logo:'ff.png', category:'Battle Royale'},
+    {id:2, name:'PUBG Mobile', slug:'pubg', logo:'pubg.png', category:'Battle Royale'},
+    {id:3, name:'Call of Duty Mobile', slug:'codm', logo:'codm.png', category:'FPS'},
+    // ... 47 more games (total 50)
+    {id:50, name:'Clash Royale', slug:'clash-royale', logo:'cr.png', category:'Strategy'}
+];
+
+function init() {
+    createParticles();
+    loadGames();
+    checkAuth();
+    document.getElementById('loginBtn').onclick = () => new bootstrap.Modal(document.getElementById('loginModal')).show();
+}
+
+function createParticles() {
+    const particles = document.getElementById('particles');
+    for(let i=0; i<50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random()*100 + '%';
+        particle.style.animationDelay = Math.random()*6 + 's';
+        particle.style.animationDuration = (Math.random()*3+3) + 's';
+        particles.appendChild(particle);
+    }
+}
+
+function loadGames() {
+    const grid = document.getElementById('gamesGrid');
+    games.forEach(game => {
+        const card = `
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                <a href="game.html?slug=${game.slug}" class="text-decoration-none">
+                    <div class="game-card glass p-4 text-center h-100 rounded-3">
+                        <img src="assets/images/games/${game.logo}" class="img-fluid mb-3" style="height:60px;" alt="${game.name}">
+                        <h6 class="fw-bold mb-2">${game.name}</h6>
+                        <small class="text-muted">${game.category}</small>
+                        <i class="fas fa-arrow-right mt-2 d-block text-primary"></i>
+                    </div>
+                </a>
+            </div>
+        `;
+        grid.innerHTML += card;
+    });
+}
+
+function checkAuth() {
+    onAuthStateChanged(auth, (u) => {
+        user = u;
+        document.getElementById('loginBtn').textContent = u ? `হাই ${u.email}` : 'লগইন';
+    });
+}
+
+window.loginUser = async () => {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+    
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+    } catch(e) {
+        alert('লগইন ফেইল! ইমেইল/পাসওয়ার্ড চেক করুন।');
+    }
+};
+
+window.registerUser = async () => {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+    
+    try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert('রেজিস্ট্রেশন সফল!');
+    } catch(e) {
+        alert('রেজিস্ট্রেশন ফেইল!');
+    }
+};
+
+window.copyNagad = () => {
+    navigator.clipboard.writeText('01838613781');
+    alert('নগদ নাম্বার কপি হয়েছে! ০১৮৩৮৬১৩৭৮১');
+};
+
+init();
